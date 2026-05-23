@@ -45,7 +45,7 @@ def render(api: str, run_id: str, summary: list[dict], agents: list[dict]) -> No
 
     # Tiny sponsor stripe — judges notice
     st.markdown(
-        "<div style='margin-top:8px;font-size:11px;color:#666'>"
+        "<div style='margin-top:10px;font-size:11px;color:#666'>"
         "Powered by <b style='color:#FFCC00'>ClickHouse</b> · "
         "<b style='color:#018BFF'>Neo4j</b> · "
         "<b style='color:#774AA4'>Obsidian</b> · "

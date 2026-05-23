@@ -28,15 +28,14 @@ def render(agents: list[dict]) -> None:
             perspective_text = a["perspective"]
             latency = a.get("latency_ms", 0)
             html = (
-                "<div style='border:1px solid #2a2a2a;border-radius:10px;padding:14px;"
-                "margin-bottom:12px;background:#0f1216;'>"
+                "<div class='card' style='margin-bottom:12px;'>"
                 "<div style='display:flex;justify-content:space-between;align-items:center;'>"
                 f"<div style='font-weight:600;color:#9be7ff;'>[{icon}] {agent_label}</div>"
                 f"<div style='font-size:13px;color:{bar_color};font-weight:700;'>{score:.1f}/10</div>"
                 "</div>"
                 f"<div style='font-size:11px;color:#888;margin-bottom:6px;'>{perspective_text}</div>"
                 f"<div style='font-size:13px;color:#ddd;'>{opinion_text}</div>"
-                f"<div style='font-size:10px;color:#555;margin-top:6px;'>{latency} ms - Gemini Flash</div>"
+                f"<div style='font-size:10px;color:#555;margin-top:6px;'>{latency} ms - Ollama</div>"
                 "</div>"
             )
             st.markdown(html, unsafe_allow_html=True)

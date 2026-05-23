@@ -32,5 +32,12 @@ def _build_recs(summary: list[dict], agents: list[dict]) -> list[str]:
 
 def render(summary: list[dict], agents: list[dict]) -> None:
     recs = _build_recs(summary, agents)
-    for r in recs:
-        st.markdown(f"- {r}")
+    if not recs:
+        st.info("No recommendations yet.")
+        return
+    items = "".join(f"<li style='margin-bottom:6px;'>{r}</li>" for r in recs)
+    st.markdown(
+        "<div class='card'><div class='section-title'>Strategic Recommendations</div>"
+        f"<ul style='margin:6px 0 0 18px;padding:0;'>{items}</ul></div>",
+        unsafe_allow_html=True,
+    )
