@@ -1,0 +1,6 @@
+[
+  {"segment":"Small Retailers","name":"Maria","role":"Independent grocery owner","wtp":89,"friction":"low","quote":"If it pays for itself in 3 months, I'll plug it in tomorrow."},
+  {"segment":"Enterprise Chains","name":"Derek","role":"VP of Innovation, Big Box Co.","wtp":850,"friction":"high","quote":"Procurement, security, legal — all three say yes or it's a no."},
+  {"segment":"Tech-savvy Stores","name":"Priya","role":"Founder of Boutique Streetwear","wtp":220,"friction":"med","quote":"I'll try anything, but Instagram already does this better."},
+  {"segment":"Privacy Focused Orgs","name":"Eli","role":"Co-op store manager","wtp":120,"friction":"high","quote":"My customers came here to escape Big Tech. Cameras kill that."}
+]

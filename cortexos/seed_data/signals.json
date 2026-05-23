@@ -1,0 +1,12 @@
+[
+  {"source":"reddit","category":"sentiment","entity":"in-store CCTV","text":"r/retail is split — small shops love the analytics, customers hate the cameras","sentiment_score":-0.15,"impact_score":0.6},
+  {"source":"reddit","category":"sentiment","entity":"privacy","text":"r/privacy thread with 12k upvotes warning about retail biometric tracking","sentiment_score":-0.7,"impact_score":0.8},
+  {"source":"x","category":"tech","entity":"vision models","text":"OSS vision models now run on $200 edge devices — recs at the rack are real","sentiment_score":0.6,"impact_score":0.9},
+  {"source":"github","category":"tech","entity":"open recommenders","text":"Stars on open retail-rec repos doubled in 6 months","sentiment_score":0.4,"impact_score":0.7},
+  {"source":"news","category":"regulation","entity":"EU AI Act","text":"EU AI Act enforcement begins; biometric retail systems = high risk","sentiment_score":-0.3,"impact_score":0.95},
+  {"source":"news","category":"competition","entity":"AdTechCorp","text":"AdTechCorp raises $80M Series C, pivots into physical-retail recs","sentiment_score":0.1,"impact_score":0.85},
+  {"source":"patent","category":"tech","entity":"shelf-level recs","text":"3 patents granted in Q1 for shelf-edge recommendation devices","sentiment_score":0.2,"impact_score":0.5},
+  {"source":"market","category":"market","entity":"retail analytics TAM","text":"Retail AI analytics TAM projected to hit $42B by 2030","sentiment_score":0.5,"impact_score":0.7},
+  {"source":"reddit","category":"sentiment","entity":"small biz adoption","text":"r/smallbusiness owners frustrated with 90s-era POS — want plug-and-play AI","sentiment_score":0.55,"impact_score":0.6},
+  {"source":"x","category":"sentiment","entity":"creepy factor","text":"Viral thread: 'I left the store the moment I saw the camera tracking my face'","sentiment_score":-0.85,"impact_score":0.75}
+]

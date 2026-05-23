@@ -1,0 +1,33 @@
+services:
+  clickhouse:
+    image: clickhouse/clickhouse-server:24.8
+    container_name: cortexos-clickhouse
+    ports:
+      - "8123:8123"   # HTTP
+      - "9000:9000"   # native
+    environment:
+      CLICKHOUSE_DB: cortexos
+      CLICKHOUSE_USER: cortexos
+      CLICKHOUSE_PASSWORD: cortexos
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 1
+    ulimits:
+      nofile: { soft: 262144, hard: 262144 }
+    volumes:
+      - ch_data:/var/lib/clickhouse
+      - ./scripts/init_clickhouse.sql:/docker-entrypoint-initdb.d/init.sql:ro
+
+  neo4j:
+    image: neo4j:5-community
+    container_name: cortexos-neo4j
+    ports:
+      - "7474:7474"   # HTTP browser
+      - "7687:7687"   # bolt
+    environment:
+      NEO4J_AUTH: neo4j/cortexos123
+      NEO4J_PLUGINS: '["apoc"]'
+    volumes:
+      - neo_data:/data
+
+volumes:
+  ch_data:
+  neo_data:
