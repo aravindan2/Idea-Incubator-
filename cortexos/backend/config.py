@@ -33,6 +33,14 @@ class Settings:
     ollama_host: str = os.getenv("OLLAMA_HOST", "http://localhost:11434")
     ollama_model: str = os.getenv("OLLAMA_MODEL", "llama3.2:1b")
 
+    # Nimble (content extraction)
+    nimble_api_key: str = os.getenv("NIMBLE_API_KEY", "")
+    nimble_base_url: str = os.getenv("NIMBLE_BASE_URL", "https://api.nimbleway.com")
+    nimble_extract_path: str = os.getenv("NIMBLE_EXTRACT_PATH", "/v1/extract")
+    nimble_auth_header: str = os.getenv("NIMBLE_AUTH_HEADER", "Authorization")
+    nimble_auth_prefix: str = os.getenv("NIMBLE_AUTH_PREFIX", "Bearer")
+    nimble_timeout_s: float = float(os.getenv("NIMBLE_TIMEOUT_S", "30"))
+
     # Datadog (optional)
     dd_api_key: str = os.getenv("DD_API_KEY", "")
     dd_site: str = os.getenv("DD_SITE", "us5.datadoghq.com")

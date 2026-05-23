@@ -57,6 +57,23 @@ CREATE TABLE IF NOT EXISTS agent_opinions
 ENGINE = MergeTree
 ORDER BY (run_id, agent, ts);
 
+-- 3.5 Nimble extractions — store requests/responses for traceability.
+CREATE TABLE IF NOT EXISTS nimble_extractions
+(
+    request_id    UUID DEFAULT generateUUIDv4(),
+    ts            DateTime64(3) DEFAULT now64(),
+    source        LowCardinality(String),
+    status_code   UInt16,
+    ok            UInt8,
+    latency_ms    UInt32,
+    request_json  String,
+    response_json String,
+    error         String
+)
+ENGINE = MergeTree
+PARTITION BY toYYYYMM(ts)
+ORDER BY (source, ts);
+
 -- 4. Materialized rollup: per-scenario-per-year totals. Cheap dashboard query.
 CREATE TABLE IF NOT EXISTS sim_rollup_year
 (

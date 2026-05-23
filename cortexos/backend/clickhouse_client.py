@@ -53,6 +53,14 @@ def insert_opinion(row: dict) -> None:
     insert("agent_opinions", [[row[c] for c in cols]], cols)
 
 
+def insert_nimble_extraction(row: dict) -> None:
+    cols = [
+        "request_id", "source", "status_code", "ok", "latency_ms",
+        "request_json", "response_json", "error",
+    ]
+    insert("nimble_extractions", [[row[c] for c in cols]], cols)
+
+
 def query(sql: str, params: dict | None = None) -> list[dict]:
     res = client().query(sql, parameters=params or {})
     return [dict(zip(res.column_names, r)) for r in res.result_rows]

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import httpx
+import logging
 import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
@@ -18,13 +19,18 @@ COLORS = {
     "regulation_tightens": "#f59e0b",
     "tech_breakthrough": "#a855f7",
 }
+log = logging.getLogger(__name__)
 
 
 @st.cache_data(ttl=120, show_spinner=False)
 def _rollup(api: str, run_id: str, scenario: str) -> pd.DataFrame:
-    r = httpx.get(f"{api}/runs/{run_id}/rollup", params={"scenario": scenario}, timeout=15)
-    r.raise_for_status()
-    return pd.DataFrame(r.json())
+    try:
+        r = httpx.get(f"{api}/runs/{run_id}/rollup", params={"scenario": scenario}, timeout=15)
+        r.raise_for_status()
+        return pd.DataFrame(r.json())
+    except httpx.HTTPError as exc:
+        log.warning("Rollup request failed for run_id=%s scenario=%s: %s", run_id, scenario, exc)
+        return pd.DataFrame()
 
 
 def render(api: str, run_id: str) -> None:

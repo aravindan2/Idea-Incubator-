@@ -1,6 +1,7 @@
 """FastAPI app — the glue between the dashboard and everything else."""
 from __future__ import annotations
 
+import json
 import logging
 import uuid
 from typing import Any
@@ -11,6 +12,7 @@ from pydantic import BaseModel, Field
 
 from .agents import run_all_agents
 from .clickhouse_client import (
+    insert_nimble_extraction,
     scenario_summary,
     segment_curves,
     sim_rollup,
@@ -19,6 +21,7 @@ from .clickhouse_client import (
 from .neo4j_client import fetch_graph
 from .simulation import run_simulation, SCENARIOS, SEGMENTS
 from .observability import incr
+from .nimble_client import extract as nimble_extract
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s")
 log = logging.getLogger("cortexos")
@@ -42,6 +45,20 @@ class SimulateResponse(BaseModel):
     elapsed_s: float
     agents: list[dict]
     scenario_summary: list[dict]
+
+
+class NimbleExtractRequest(BaseModel):
+    source: str = Field(default="unknown", min_length=1, max_length=100)
+    payload: dict[str, Any] = Field(default_factory=dict)
+
+
+class NimbleExtractResponse(BaseModel):
+    request_id: str
+    ok: bool
+    status_code: int
+    latency_ms: int
+    data: dict[str, Any] | None = None
+    error: str | None = None
 
 
 @app.get("/health")
@@ -69,6 +86,39 @@ def simulate(req: SimulateRequest) -> SimulateResponse:
         elapsed_s=sim.elapsed_s,
         agents=agents,
         scenario_summary=scenario_summary(run_id),
+    )
+
+
+@app.post("/nimble/extract", response_model=NimbleExtractResponse)
+def nimble_extract_endpoint(req: NimbleExtractRequest) -> NimbleExtractResponse:
+    incr("cortexos.api.nimble_extract")
+    if not req.payload:
+        raise HTTPException(400, "payload is required")
+
+    result = nimble_extract(req.payload)
+    request_id = f"nimble_{uuid.uuid4().hex[:10]}"
+
+    try:
+        insert_nimble_extraction({
+            "request_id": request_id,
+            "source": req.source,
+            "status_code": result.status_code,
+            "ok": 1 if result.ok else 0,
+            "latency_ms": result.latency_ms,
+            "request_json": json.dumps(req.payload, ensure_ascii=True),
+            "response_json": json.dumps(result.data, ensure_ascii=True) if result.data is not None else "",
+            "error": result.error or "",
+        })
+    except Exception as e:  # noqa: BLE001
+        log.warning("Failed to persist Nimble extraction: %s", e)
+
+    return NimbleExtractResponse(
+        request_id=request_id,
+        ok=result.ok,
+        status_code=result.status_code,
+        latency_ms=result.latency_ms,
+        data=result.data,
+        error=result.error,
     )
 
 

@@ -78,12 +78,8 @@ def _run_agent(run_id: str, agent_name: str, perspective: str, system: str, user
     incr("cortexos.agent.calls", tags=[f"agent:{agent_name}"])
     full_system = f"{system}\n\n{FORMAT_INSTRUCTION}"
 
-    if settings.use_ollama == 1:
-        raw, latency = ollama_generate(prompt=user_prompt, system=full_system, temperature=0.7, max_tokens=1500)
-        model_name = settings.ollama_model
-    else:
-        raw, latency = generate(prompt=user_prompt, system=full_system, temperature=0.7, max_tokens=1500)
-        model_name = settings.gemini_model
+    raw, latency = ollama_generate(prompt=user_prompt, system=full_system, temperature=0.7, max_tokens=1500)
+    model_name = settings.ollama_model
 
     # Log the raw model output once per call — invaluable when scores look wrong.
     log.info("agent=%s raw=%r", agent_name, raw[:400])

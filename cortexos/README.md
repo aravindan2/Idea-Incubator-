@@ -34,6 +34,24 @@ streamlit run frontend/app.py
 
 Open http://localhost:8501 — type an idea, hit "Run Evolution".
 
+## Nimble extraction (optional)
+
+Set these environment variables to enable Nimble extraction:
+
+- `NIMBLE_API_KEY`
+- `NIMBLE_BASE_URL` (default: `https://api.nimbleway.com`)
+- `NIMBLE_EXTRACT_PATH` (default: `/v1/extract`)
+- `NIMBLE_AUTH_HEADER` (default: `Authorization`)
+- `NIMBLE_AUTH_PREFIX` (default: `Bearer`)
+
+Use the API endpoint to send the Nimble payload you want to run:
+
+```bash
+curl -X POST http://localhost:8000/nimble/extract \
+  -H "Content-Type: application/json" \
+  -d '{"source":"manual","payload":{"url":"https://example.com"}}'
+```
+
 ## Split of work (2 members, 2 hrs)
 
 | Member | Owns | Files |
