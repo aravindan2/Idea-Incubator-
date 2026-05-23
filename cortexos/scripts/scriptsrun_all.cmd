@@ -4,19 +4,27 @@ setlocal enabledelayedexpansion
 REM Move to project root
 cd /d "%~dp0\.."
 
-echo [1/5] docker compose up -d
+echo [0/6] create venv if missing
+if not exist .venv (
+    py -3.12 -m venv .venv
+)
+
+echo [1/6] activate venv
+call .venv\Scripts\activate.bat
+
+echo [2/6] upgrade pip tools
+python -m pip install --upgrade pip setuptools wheel
+
+echo [3/6] docker compose up -d
 docker compose up -d
 
-echo [2/5] waiting for ClickHouse to be ready
-
-set READY=0
+echo [4/6] waiting for ClickHouse to be ready
 
 for /L %%i in (1,1,30) do (
     curl -sf http://localhost:8123/ping >nul 2>&1
 
     if !errorlevel! == 0 (
         echo   ClickHouse ready
-        set READY=1
         goto :after_wait
     )
 
@@ -25,19 +33,27 @@ for /L %%i in (1,1,30) do (
 
 :after_wait
 
-echo [3/5] ensure Ollama model
+echo [5/6] ensure Ollama model
 ollama pull llama3.2:1b
 
-echo [4/5] python deps
-python -m pip install -q -r requirements.txt
+echo [6/6] python deps
+pip install -r requirements.txt
 
-echo [5/5] seed data + schemas
+echo [7/7] seed data + schemas
 python -m backend.ingest.seed
 
 echo.
-echo Now run these in separate terminals:
+echo ==========================================
+echo CortexOS setup complete
+echo ==========================================
 echo.
+echo Run these in separate terminals:
+echo.
+echo   call .venv\Scripts\activate.bat
 echo   uvicorn backend.main:app --reload --port 8000
+echo.
+echo   call .venv\Scripts\activate.bat
 echo   streamlit run frontend/app.py
+echo.
 
 pause

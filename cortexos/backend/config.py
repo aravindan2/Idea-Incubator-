@@ -29,6 +29,7 @@ class Settings:
     gemini_model: str = os.getenv("GEMINI_MODEL", "gemini-2.0-flash")
 
     # Ollama (fallback if you want to swap back to local)
+    use_ollama: int = int(os.getenv("USE_OLLAMA", "0"))
     ollama_host: str = os.getenv("OLLAMA_HOST", "http://localhost:11434")
     ollama_model: str = os.getenv("OLLAMA_MODEL", "llama3.2:1b")
 
