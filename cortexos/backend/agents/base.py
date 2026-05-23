@@ -12,7 +12,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, asdict
 from typing import Callable
 
-from ..ollama_client import generate, extract_score
+from ..gemini_client import generate, extract_score
 from ..config import settings
 from ..clickhouse_client import insert_opinion
 from ..observability import incr
@@ -57,7 +57,7 @@ def _run_agent(
             "opinion": text,
             "score": result.score,
             "latency_ms": latency,
-            "model": settings.ollama_model,
+            "model": settings.gemini_model,
         })
     except Exception as e:  # noqa: BLE001
         log.warning("Failed to persist opinion for %s: %s", agent_name, e)

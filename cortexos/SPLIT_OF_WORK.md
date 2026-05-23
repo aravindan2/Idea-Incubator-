@@ -8,7 +8,7 @@ Two members, 4 person-hours. Sync every 30 min.
 
 | Time | Task | File |
 |---|---|---|
-| 0:00 – 0:15 | `docker compose up -d`, `ollama pull llama3.2:1b`, `pip install -r requirements.txt` | — |
+| 0:00 – 0:15 | Spin up ClickHouse Cloud service, fill `.env` with creds + `GEMINI_API_KEY`, `pip install -r requirements.txt` | `.env` |
 | 0:15 – 0:25 | Run `python -m backend.ingest.seed` and confirm `world_signals` count in ClickHouse | `backend/ingest/seed.py` |
 | 0:25 – 0:50 | Bring up FastAPI, test `/health` and `/simulate` with a curl | `backend/main.py` |
 | 0:50 – 1:15 | Tune `SCENARIOS` multipliers in `backend/simulation/scenarios.py` until the four lines on the dashboard look visibly different | `backend/simulation/scenarios.py` |
@@ -25,7 +25,7 @@ Two members, 4 person-hours. Sync every 30 min.
 | 0:00 – 0:15 | Install deps, `streamlit run frontend/app.py` against mocked JSON | `frontend/app.py` |
 | 0:15 – 0:45 | Refine the visual hierarchy of the executive header + scenario tabs. Replace any boring text with founder-facing copy | `frontend/views/dashboard.py`, `frontend/views/recommendations.py` |
 | 0:45 – 1:00 | Wire the Neo4j graph viz once A confirms `/graph` works | `frontend/views/network.py` |
-| 1:00 – 1:20 | Set up Datadog dashboard with three tiles: `cortexos.ollama.latency_ms`, `cortexos.sim.rows`, `cortexos.agent.calls`. Take a screenshot — that's your sponsor evidence slide | `backend/observability.py` |
+| 1:00 – 1:20 | Set up Datadog dashboard with three tiles: `cortexos.gemini.latency_ms`, `cortexos.sim.rows`, `cortexos.agent.calls`. Take a screenshot — that's your sponsor evidence slide | `backend/observability.py` |
 | 1:20 – 1:45 | Write/rehearse the 90-second demo from `DEMO_SCRIPT.md` — say it out loud twice | `DEMO_SCRIPT.md` |
 | 1:45 – 2:00 | Make sure the ClickHouse Play tab and Neo4j Browser tab are open and prepped | — |
 

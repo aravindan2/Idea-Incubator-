@@ -4,8 +4,9 @@
 
 ## Setup checklist (do BEFORE the demo, not on stage)
 
-- [ ] `docker compose up -d` — verify ClickHouse + Neo4j healthy
-- [ ] `ollama serve` running, `ollama pull llama3.2:1b` complete
+- [ ] ClickHouse Cloud service running; `.env` filled in
+- [ ] `GEMINI_API_KEY` set in `.env`; smoke-test with `python -c "from backend.gemini_client import generate; print(generate('say hi', max_tokens=20))"`
+- [ ] Neo4j AuraDB (or local docker neo4j) reachable
 - [ ] `python -m backend.ingest.seed` ran clean
 - [ ] `uvicorn backend.main:app --port 8000` running, hit `/health` once
 - [ ] `streamlit run frontend/app.py` open in browser, idea pre-filled
@@ -43,7 +44,7 @@
 > Type "AI ad recs from CCTV in retail" → click **Run Evolution**.
 
 > **0:15 — While it runs, narrate the architecture (20s)**
-> "Under the hood: six perspective agents — a user persona, an investor, a competitor, a regulator, a skeptic, a trend analyst — all running on a local **1B** Ollama model. In parallel, a Bass-diffusion + Markov-chain simulator generates 16,000 timesteps across four scenarios. Every event lands in **ClickHouse**. Entities and relationships go to **Neo4j**."
+> "Under the hood: six perspective agents — a user persona, an investor, a competitor, a regulator, a skeptic, a trend analyst — all running on **Gemini 2.0 Flash** in parallel. While they think, a Bass-diffusion + Markov-chain simulator generates 16,000 timesteps across four scenarios. Every event lands in **ClickHouse Cloud**. Entities and relationships go to **Neo4j**."
 
 > **0:35 — Dashboard returns (5s)**
 > Point at the **viability score** (top-left, big number) and the **scenario summary**.
@@ -58,7 +59,7 @@
 > Flip to the Knowledge Graph tab in Streamlit (or Neo4j browser). "Segments, competitors, regulations — all related. We use Neo4j to answer 'which regulation constrains which segment.'"
 
 > **1:20 — Agent Opinions tab (5s)**
-> Show the six cards. "Six personas. Six scores. One investor's hot take. All from a 1B model — fits on a Raspberry Pi."
+> Show the six cards. "Six personas. Six scores. One investor's hot take. All in under 2 seconds via Gemini Flash."
 
 > **1:25 — Strategic Recommendations (5s)**
 > "And it ends with what a founder actually needs: where to start, what to fear, when to scale."
@@ -70,7 +71,7 @@
 
 ## If something breaks on stage
 
-- **Ollama hangs** → close the tab; the dashboard still works on agent stub text. Pivot to ClickHouse.
+- **Gemini hangs / rate-limits** → close the tab; the agents will return stub text and the dashboard still works. Pivot to ClickHouse.
 - **ClickHouse refuses connection** → run on the same machine; show the Streamlit charts which cache aggressively.
 - **Neo4j down** → skip the tab; mention it in passing.
 - **Sim takes too long** → drop horizon to 25 years in the sidebar.
@@ -79,6 +80,6 @@
 
 - **ClickHouse** → temporal query in Play, `AggregatingMergeTree` schema, `quantilesTDigest` future use
 - **Neo4j** → the live graph viz + the Cypher constraints
-- **Datadog** → `cortexos.ollama.latency_ms`, `cortexos.sim.rows`, `cortexos.agent.calls` metrics
+- **Datadog** → `cortexos.gemini.latency_ms`, `cortexos.sim.rows`, `cortexos.agent.calls` metrics
 - **Obsidian** *(stretch)* → mention as the "living wiki" of run summaries — show README.
 - **Nimble** *(stretch)* → mention orchestration layer in the architecture slide.

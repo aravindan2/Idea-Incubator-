@@ -1,12 +1,12 @@
 # Cortexos Evolution Engine
 
 AI-powered startup strategy & market evolution simulator (20–100 yr horizon).
-Built for a 2-hour hackathon. Stack: **FastAPI + Streamlit + ClickHouse + Neo4j + Ollama (1B) + Datadog**.
+Built for a 2-hour hackathon. Stack: **FastAPI + Streamlit + ClickHouse Cloud + Neo4j + Gemini 2.0 Flash + Datadog**.
 
 ## 60-second mental model
 
 1. User submits a startup idea (e.g. "AI ad recs from in-store CCTV").
-2. Six **perspective agents** (User, Investor, Competitor, Regulatory, Skeptic, Trend) generate opinions via local Ollama.
+2. Six **perspective agents** (User, Investor, Competitor, Regulatory, Skeptic, Trend) generate opinions via Gemini 2.0 Flash.
 3. **Simulation engine** runs Bass diffusion + Markov scenarios over 0–100 years per segment.
 4. Every event lands in **ClickHouse** (the temporal brain). Entities + relationships go to **Neo4j**.
 5. **Streamlit** renders the executive dashboard.
@@ -14,22 +14,23 @@ Built for a 2-hour hackathon. Stack: **FastAPI + Streamlit + ClickHouse + Neo4j 
 ## Run order (5 commands, ~3 min)
 
 ```bash
-# 1. Bring up ClickHouse + Neo4j
-docker compose up -d
+# 1. Set up .env with ClickHouse Cloud + Gemini credentials
+cp .env.example .env   # then fill in CLICKHOUSE_* and GEMINI_API_KEY
 
-# 2. Pull a 1B model in Ollama (in another terminal)
-ollama pull llama3.2:1b
-
-# 3. Install python deps + init schemas
+# 2. Install python deps + init schemas (creates tables in ClickHouse Cloud)
 pip install -r requirements.txt
 python -m backend.ingest.seed
 
-# 4. Start the API
+# 3. Start the API
 uvicorn backend.main:app --reload --port 8000
 
-# 5. Start the dashboard (new terminal)
+# 4. Start the dashboard (new terminal)
 streamlit run frontend/app.py
 ```
+
+> Get a Gemini API key for free at https://aistudio.google.com/apikey.
+> For Neo4j, easiest path is the AuraDB Free tier at https://console.neo4j.io
+> (or `docker compose up -d neo4j` if you have Docker running).
 
 Open http://localhost:8501 — type an idea, hit "Run Evolution".
 

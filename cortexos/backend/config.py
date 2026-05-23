@@ -1,4 +1,4 @@
-"""Central config — load .env once, expose typed settings."""
+"""Central config - load .env once, expose typed settings."""
 from __future__ import annotations
 
 import os
@@ -24,7 +24,11 @@ class Settings:
     neo_user: str = os.getenv("NEO4J_USER", "neo4j")
     neo_password: str = os.getenv("NEO4J_PASSWORD", "cortexos123")
 
-    # Ollama
+    # Gemini (primary LLM)
+    gemini_api_key: str = os.getenv("GEMINI_API_KEY", "")
+    gemini_model: str = os.getenv("GEMINI_MODEL", "gemini-2.0-flash")
+
+    # Ollama (fallback if you want to swap back to local)
     ollama_host: str = os.getenv("OLLAMA_HOST", "http://localhost:11434")
     ollama_model: str = os.getenv("OLLAMA_MODEL", "llama3.2:1b")
 
